@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: jewelcca-postgres
+    environment:
+      POSTGRES_DB: jewelcca_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Cem@12345
+    ports:
+      - "5433:5432"  # use 5433 on host, 5432 inside docker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - jewelcca-network
+
+  app:
+    build: .
+    container_name: jewelcca-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: JewelccaDB  # match with postgres service
+      DB_USERNAME: postgres
+      DB_PASSWORD: Cem@12345
+      JWT_SECRET: mySecretKeyForJewelccaApplication2024
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
+    ports:
+      - "9090:8080"
+    depends_on:
+      - postgres
+    networks:
+      - jewelcca-network
+
+volumes:
+  postgres_data:
+
+networks:
+  jewelcca-network:
+    driver: bridge
