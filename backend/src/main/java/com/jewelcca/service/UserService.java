@@ -1,5 +1,7 @@
 package com.jewelcca.service;
 
+import com.jewelcca.dto.ChangePasswordRequest;
+import com.jewelcca.dto.UserUpdateRequest;
 import com.jewelcca.entity.User;
 import com.jewelcca.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +20,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -38,25 +44,42 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll(pageable);
     }
 
-    public User updateUser(Long id, User userUpdate) {
+    public User updateUser(Long id, UserUpdateRequest userUpdateRequest) {
         User user = getUserById(id);
-        
-        if (userUpdate.getFirstName() != null) {
-            user.setFirstName(userUpdate.getFirstName());
+
+        if (userUpdateRequest.getFirstName() != null) {
+            user.setFirstName(userUpdateRequest.getFirstName());
         }
-        if (userUpdate.getLastName() != null) {
-            user.setLastName(userUpdate.getLastName());
+        if (userUpdateRequest.getLastName() != null) {
+            user.setLastName(userUpdateRequest.getLastName());
         }
-        if (userUpdate.getPhone() != null) {
-            user.setPhone(userUpdate.getPhone());
+        if (userUpdateRequest.getEmail() != null) {
+            user.setEmail(userUpdateRequest.getEmail());
         }
-        
+        if (userUpdateRequest.getPhone() != null) {
+            user.setPhone(userUpdateRequest.getPhone());
+        }
+
         user.setUpdatedAt(LocalDateTime.now());
         return userRepository.save(user);
+    }
+
+    public void changePassword(Long id, ChangePasswordRequest changePasswordRequest) {
+        User user = getUserById(id);
+
+        // Check if the old password is correct
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid old password");
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
         User user = getUserById(id);
         userRepository.delete(user);
     }
+
 }

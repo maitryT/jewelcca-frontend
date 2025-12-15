@@ -1,5 +1,7 @@
 package com.jewelcca.controller;
 
+import com.jewelcca.dto.ChangePasswordRequest;
+import com.jewelcca.dto.UserUpdateRequest;
 import com.jewelcca.entity.User;
 import com.jewelcca.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,20 @@ public class UserController {
 
     @PutMapping("/profile")
     public ResponseEntity<User> updateUserProfile(
-            @RequestBody User userUpdate,
+            @RequestBody UserUpdateRequest userUpdateRequest,
             Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        User updatedUser = userService.updateUser(user.getId(), userUpdate);
+        User updatedUser = userService.updateUser(user.getId(), userUpdateRequest);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @PostMapping("/profile/change-password")
+    public ResponseEntity<Void> changePassword(
+            @RequestBody ChangePasswordRequest changePasswordRequest,
+            Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        userService.changePassword(user.getId(), changePasswordRequest);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/admin/all")
@@ -50,8 +61,8 @@ public class UserController {
 
     @PutMapping("/admin/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest userUpdateRequest) {
+        User updatedUser = userService.updateUser(id, userUpdateRequest);
         return ResponseEntity.ok(updatedUser);
     }
 
