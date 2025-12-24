@@ -23,9 +23,8 @@ import Profile from "./pages/Profile";
 import Offers from "./pages/Offers";
 import AboutUs from "./pages/AboutUs";
 import Admin from "./pages/Admin";
-import ProductDetail from "./pages/product-detail";
-import ProfilePage from "./pages/profilePage";
-import Events from "./pages/events";
+import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
 
 function App() {
   return (
@@ -52,9 +51,8 @@ function App() {
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/admin" element={<Admin />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
-                <Route path="/profilepage" element={<ProfilePage />} />
                 <Route path="/events" element={<Events />} />
+                <Route path="/events/:id" element={<EventDetail />} />
               </Routes>
             </Layout>
           </Router>

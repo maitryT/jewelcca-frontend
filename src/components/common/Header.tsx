@@ -52,6 +52,9 @@ export default function Header() {
             <Link to="/offers" className="text-text-primary hover:text-text-secondary transition-colors font-medium">
               Offers
             </Link>
+            <Link to="/events" className="text-text-primary hover:text-text-secondary transition-colors font-medium">
+              Events
+            </Link>
             <Link to="/about" className="text-text-primary hover:text-text-secondary transition-colors font-medium">
               About Us
             </Link>
@@ -185,6 +188,13 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Offers
+              </Link>
+              <Link
+                to="/events"
+                className="px-2 py-2 text-text-primary hover:text-text-secondary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Events
               </Link>
               <Link
                 to="/about"

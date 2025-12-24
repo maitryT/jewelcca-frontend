@@ -191,18 +191,24 @@ export default function Home() {
                     {event.description}
                   </p>
                   
-                  <button className="w-full bg-text-primary text-white py-2 rounded-lg font-medium hover:bg-gray-700 transform hover:-translate-y-0.5 transition-all duration-200">
+                  <Link
+                    to={`/events/${event.id}`}
+                    className="block w-full bg-text-primary text-white py-2 rounded-lg font-medium hover:bg-gray-700 transform hover:-translate-y-0.5 transition-all duration-200 text-center"
+                  >
                     Learn More
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="text-center mt-8">
-            <button className="bg-white text-text-primary border-2 border-text-primary px-8 py-3 rounded-lg font-semibold hover:bg-text-primary hover:text-white transition-colors shadow-md">
+            <Link
+              to="/events"
+              className="inline-block bg-white text-text-primary border-2 border-text-primary px-8 py-3 rounded-lg font-semibold hover:bg-text-primary hover:text-white transition-colors shadow-md"
+            >
               View All Events
-            </button>
+            </Link>
           </div>
         </div>
       </section>

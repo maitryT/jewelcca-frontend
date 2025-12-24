@@ -148,6 +148,15 @@ export const paymentAPI = {
   verifyPayment: (paymentData: any) => api.post('/payment/verify', paymentData),
 };
 
+// Events API
+export const eventsAPI = {
+  getAll: () => api.get('/events'),
+  getById: (id: string) => api.get(`/events/${id}`),
+  create: (event: any) => api.post('/events', event),
+  update: (id: string, event: any) => api.put(`/events/${id}`, event),
+  delete: (id: string) => api.delete(`/events/${id}`),
+};
+
 // Admin API
 export const adminAPI = {
   // Dashboard
