@@ -1,28 +1,31 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/common/Layout';
-import { AuthProvider } from './hooks/useAuth';
-import { CartProvider } from './hooks/useCart';
-import { WishlistProvider } from './hooks/useWishlist';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/common/Layout";
+import { AuthProvider } from "./hooks/useAuth";
+import { CartProvider } from "./hooks/useCart";
+import { WishlistProvider } from "./hooks/useWishlist";
 
 // Pages
-import Home from './pages/Home';
-import Categories from './pages/Categories';
-import ProductsPage from './pages/ProductsPage';
-import ProductDetailPage from './pages/ProductDetailPage';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import Cart from './pages/Cart';
-import Wishlist from './pages/Wishlist';
-import Checkout from './pages/Checkout';
-import OrderSuccess from './pages/OrderSuccess';
-import Orders from './pages/Orders';
-import Profile from './pages/Profile';
-import Offers from './pages/Offers';
-import AboutUs from './pages/AboutUs';
-import Admin from './pages/Admin';
+import Home from "./pages/Home";
+import Categories from "./pages/Categories";
+import ProductsPage from "./pages/ProductsPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import Cart from "./pages/Cart";
+import Wishlist from "./pages/Wishlist";
+import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
+import Orders from "./pages/Orders";
+import Profile from "./pages/Profile";
+import Offers from "./pages/Offers";
+import AboutUs from "./pages/AboutUs";
+import Admin from "./pages/Admin";
+import ProductDetail from "./pages/product-detail";
+import ProfilePage from "./pages/profilePage";
+import Events from "./pages/events";
 
 function App() {
   return (
@@ -49,6 +52,9 @@ function App() {
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/profilepage" element={<ProfilePage />} />
+                <Route path="/events" element={<Events />} />
               </Routes>
             </Layout>
           </Router>
