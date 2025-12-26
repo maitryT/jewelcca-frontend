@@ -157,6 +157,16 @@ export const eventsAPI = {
   delete: (id: string) => api.delete(`/events/${id}`),
 };
 
+// Addresses API
+export const addressesAPI = {
+  getAll: () => api.get('/addresses'),
+  getById: (id: string) => api.get(`/addresses/${id}`),
+  create: (address: any) => api.post('/addresses', address),
+  update: (id: string, address: any) => api.put(`/addresses/${id}`, address),
+  delete: (id: string) => api.delete(`/addresses/${id}`),
+  setDefault: (id: string) => api.put(`/addresses/${id}/default`),
+};
+
 // Admin API
 export const adminAPI = {
   // Dashboard
@@ -192,8 +202,21 @@ export const adminAPI = {
   // Analytics
   getCustomerInsights: () => api.get('/admin/analytics/customer-insights'),
   getInventoryReport: () => api.get('/admin/analytics/inventory-report'),
-  getFinancialSummary: (startDate?: string, endDate?: string) => 
+  getFinancialSummary: (startDate?: string, endDate?: string) =>
     api.get('/admin/analytics/financial-summary', { params: { startDate, endDate } }),
+
+  // Events Management
+  getAllEvents: (page = 0, size = 20) => api.get(`/admin/events?page=${page}&size=${size}`),
+  getEventById: (id: string) => api.get(`/admin/events/${id}`),
+  createEvent: (event: any) => api.post('/admin/events', event),
+  updateEvent: (id: string, event: any) => api.put(`/admin/events/${id}`, event),
+  deleteEvent: (id: string) => api.delete(`/admin/events/${id}`),
+
+  // Address Management
+  getAllAddresses: (page = 0, size = 20) => api.get(`/admin/addresses?page=${page}&size=${size}`),
+  getAddressById: (id: string) => api.get(`/admin/addresses/${id}`),
+  updateAddress: (id: string, address: any) => api.put(`/admin/addresses/${id}`, address),
+  deleteAddress: (id: string) => api.delete(`/admin/addresses/${id}`),
 };
 
 export default api;

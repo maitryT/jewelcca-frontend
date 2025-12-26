@@ -63,6 +63,8 @@ export default function Admin() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [events, setEvents] = useState<any[]>([]);
+  const [addresses, setAddresses] = useState<any[]>([]);
 
   useEffect(() => {
     if (activeTab === "dashboard") {
@@ -73,8 +75,36 @@ export default function Admin() {
       fetchProducts();
     } else if (activeTab === "orders") {
       fetchOrders();
+    } else if (activeTab === "events") {
+      fetchEvents();
+    } else if (activeTab === "addresses") {
+      fetchAddresses();
     }
   }, [activeTab]);
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const response = await adminAPI.getAllEvents();
+      setEvents(response.data.content || response.data);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchAddresses = async () => {
+    try {
+      setLoading(true);
+      const response = await adminAPI.getAllAddresses();
+      setAddresses(response.data.content || response.data);
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchDashboardData = async () => {
     try {
@@ -211,6 +241,8 @@ export default function Admin() {
               { id: "orders", name: "Orders", icon: ShoppingCart },
               { id: "products", name: "Products", icon: Package },
               { id: "users", name: "Users", icon: Users },
+              { id: "events", name: "Events", icon: Calendar },
+              { id: "addresses", name: "Addresses", icon: MapPin },
               { id: "inventory", name: "Inventory", icon: AlertTriangle },
             ].map((tab) => {
               const IconComponent = tab.icon;
@@ -873,6 +905,132 @@ export default function Admin() {
                   </div>
                 </form>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Events Tab */}
+        {activeTab === "events" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-semibold text-text-primary">
+                Event Management
+              </h2>
+              <button className="flex items-center space-x-2 px-4 py-2 bg-text-primary text-white rounded-lg hover:bg-gray-700 transition-colors">
+                <Plus className="h-4 w-4" />
+                <span>Create Event</span>
+              </button>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-light-gray">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-light-gray bg-gray-50">
+                      <th className="text-left py-3 px-4 font-medium text-text-secondary">
+                        Event Name
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-text-secondary">
+                        Date
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-text-secondary">
+                        Location
+                      </th>
+                      <th className="text-right py-3 px-4 font-medium text-text-secondary">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {events.length > 0 ? (
+                      events.map((event: any) => (
+                        <tr key={event.id} className="border-b border-light-gray hover:bg-gray-50 transition-colors">
+                          <td className="py-3 px-4">
+                            <p className="font-medium text-text-primary">{event.title}</p>
+                            <p className="text-sm text-text-secondary line-clamp-1">{event.description}</p>
+                          </td>
+                          <td className="py-3 px-4 text-text-secondary">
+                            {new Date(event.date).toLocaleDateString()}
+                          </td>
+                          <td className="py-3 px-4 text-text-secondary">
+                            {event.location}
+                          </td>
+                          <td className="py-3 px-4 text-right">
+                            <button className="p-1 text-text-primary hover:bg-light-gray rounded transition-colors mr-2">
+                              <Edit className="h-4 w-4" />
+                            </button>
+                            <button className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors">
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="py-8 text-center text-text-secondary">
+                          No events found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Addresses Tab */}
+        {activeTab === "addresses" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-semibold text-text-primary">
+                Address Management
+              </h2>
+              <div className="flex items-center space-x-2">
+                <Search className="h-4 w-4 text-text-light" />
+                <input
+                  type="text"
+                  placeholder="Search by city, state..."
+                  className="px-4 py-2 border border-light-gray rounded-lg focus:ring-2 focus:ring-text-primary focus:border-transparent"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {addresses.length > 0 ? (
+                addresses.map((address: any) => (
+                  <div key={address.id} className="bg-white rounded-lg shadow-sm border border-light-gray p-4 hover:shadow-md transition-shadow">
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="font-semibold text-text-primary">
+                        {address.city}, {address.state}
+                      </h3>
+                      {address.isDefault && (
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
+                          Default
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-text-secondary mb-1">{address.streetAddress}</p>
+                    <p className="text-sm text-text-secondary mb-4">{address.zipCode} - {address.country}</p>
+                    <div className="flex gap-2">
+                      <button className="flex-1 text-sm py-2 text-text-primary hover:bg-light-gray rounded transition-colors">
+                        <Edit className="h-4 w-4 inline mr-1" />
+                        Edit
+                      </button>
+                      <button className="flex-1 text-sm py-2 text-red-600 hover:bg-red-50 rounded transition-colors">
+                        <Trash2 className="h-4 w-4 inline mr-1" />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12 text-text-secondary">
+                  No addresses found
+                </div>
+              )}
             </div>
           </div>
         )}

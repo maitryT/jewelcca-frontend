@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Search, 
-  ShoppingCart, 
-  Heart, 
-  User, 
-  Menu, 
+import {
+  Search,
+  ShoppingCart,
+  Heart,
+  User,
+  Menu,
   X,
   Crown,
   LogOut,
@@ -16,10 +16,13 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
 import { useWishlist } from '../../hooks/useWishlist';
+import SearchResults from '../product/SearchResults';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user, logout } = useAuth();
   const { getTotalItems } = useCart();
   const { items: wishlistItems } = useWishlist();
@@ -67,6 +70,9 @@ export default function Header() {
               <input
                 type="text"
                 placeholder="Search jewelry..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchOpen(true)}
                 className="w-full pl-10 pr-4 py-2 border border-light-gray rounded-lg focus:ring-2 focus:ring-text-primary focus:border-transparent bg-gray-50"
               />
             </div>
@@ -217,6 +223,12 @@ export default function Header() {
           </div>
         )}
       </div>
+
+      <SearchResults
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        query={searchQuery}
+      />
     </header>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Mail, Phone, MapPin, Edit, Save, X, Lock, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import AddressManager from '../components/common/AddressManager';
 
 export default function Profile() {
   const { user } = useAuth();
@@ -326,6 +327,11 @@ export default function Profile() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Address Manager Section */}
+        <div className="mt-8 bg-white rounded-lg shadow-md p-6">
+          <AddressManager />
         </div>
 
         {/* Change Password Modal */}
